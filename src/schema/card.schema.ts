@@ -2,6 +2,7 @@ import { object, string } from "yup";
 
 const payload = {
   body: object({
+    listId: string().required("Must specify which list to add card to"),
     title: string()
       .required("Title is required")
       .max(100, "Title must be no more than than 100 characters"),

@@ -2,23 +2,32 @@ import supertest from "supertest";
 import { createServer } from "../core/server";
 import { Paths } from "../routes";
 import { createCard, getCards } from "../service/card.service";
+import { createList } from "../service/list.service";
 import { asJsonReturnObj } from "../utils/general";
 import {
   commonFieldsAndTimestampsExpectation,
   setupMongoMemoryTestService,
 } from "./test-utils";
 
-const cardPayload1 = { title: "Demo Card" };
-const cardPayload2 = { title: "Demo Card 2" };
-const cardExpectedResult1 = {
-  ...cardPayload1,
+let listId = "";
+
+const cardPayload1 = () => ({ listId, title: "Demo Card" });
+const cardPayload2 = () => ({ listId, title: "Demo Card 2" });
+const cardExpectedResult1 = () => ({
+  ...cardPayload1(),
   ...commonFieldsAndTimestampsExpectation,
+});
+
+const createTheList = async () => {
+  const list = await createList({ title: "Demo List" }).then(asJsonReturnObj);
+  listId = list._id;
 };
 
 const setupForDelete = async () => {
-  await createCard(cardPayload1).then(asJsonReturnObj);
+  await createTheList();
+  await createCard(cardPayload1()).then(asJsonReturnObj);
   const cardsWith1 = await getCards().then((arr) => arr.map(asJsonReturnObj));
-  const card2 = await createCard(cardPayload2).then(asJsonReturnObj);
+  const card2 = await createCard(cardPayload2()).then(asJsonReturnObj);
   const cardsWithBoth = await getCards().then((arr) =>
     arr.map(asJsonReturnObj)
   );
@@ -41,7 +50,8 @@ describe("Cards", () => {
     });
     describe("given a new Card has been created", () => {
       it("should return a 1-long array with the created Card", async () => {
-        const card = await createCard(cardPayload1).then(asJsonReturnObj);
+        await createTheList();
+        const card = await createCard(cardPayload1()).then(asJsonReturnObj);
 
         const { statusCode, body } = await supertest(app).get(Paths.CARDS);
 
@@ -59,7 +69,8 @@ describe("Cards", () => {
     });
     describe("given a Card with known ID exists", () => {
       it("should return the requested Card", async () => {
-        const card = await createCard(cardPayload1).then(asJsonReturnObj);
+        await createTheList();
+        const card = await createCard(cardPayload1()).then(asJsonReturnObj);
 
         const { statusCode, body } = await supertest(app).get(
           `${Paths.CARDS}/${card._id}`
@@ -76,20 +87,31 @@ describe("Cards", () => {
       it("should create the new Card and return it", async () => {
         const { statusCode, body } = await supertest(app)
           .post(Paths.CARDS)
-          .send(cardPayload1);
+          .send(cardPayload1());
 
         expect(statusCode).toBe(200);
-        expect(body).toEqual(cardExpectedResult1);
+        expect(body).toEqual(cardExpectedResult1());
       });
     });
     describe("given we make a POST request with missing title", () => {
       it("should error 400 and return correct error message", async () => {
+        await createTheList();
         const { statusCode, body } = await supertest(app)
           .post(Paths.CARDS)
-          .send({});
+          .send({ listId });
 
         expect(statusCode).toBe(400);
         expect(body).toEqual(["Title is required"]);
+      });
+    });
+    describe("given we make a POST request with missing listId", () => {
+      it("should error 400 and return correct error message", async () => {
+        const { statusCode, body } = await supertest(app)
+          .post(Paths.CARDS)
+          .send({ title: "Card with no list!" });
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual(["Must specify which list to add card to"]);
       });
     });
   });
