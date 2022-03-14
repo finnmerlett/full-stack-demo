@@ -7,12 +7,14 @@ import { setupMongoMemoryTestService } from "./test-utils";
 
 const app = createServer();
 
-describe("Health Check", () => {
+describe("Lists", () => {
   setupMongoMemoryTestService();
 
-  describe("Check that the server is up", () => {
-    it("should return code 200", async () => {
-      await supertest(app).get(Paths.HEALTHCHECK).expect(200);
+  describe("Get list route", () => {
+    describe("given no lists have been created", () => {
+      it("should return an empty list", async () => {
+        await supertest(app).get(Paths.LISTS).expect(200).expect([]);
+      });
     });
   });
 });

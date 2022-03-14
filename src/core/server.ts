@@ -1,6 +1,10 @@
 import express from "express";
 import routes from "../routes";
 
+/**
+ * Create an express app, set up middleware and add routes (via routes function)
+ * @returns the express app
+ */
 export function createServer() {
   const app = express();
 
