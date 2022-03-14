@@ -1,9 +1,7 @@
-import express from "express";
 import config from "config";
 import mongoose from "mongoose";
-import log from "./utils/log";
-import routes from "./routes";
 import { createServer } from "./core/server";
+import log from "./utils/log";
 
 const port = config.get<number>("port");
 const host = config.get<string>("host");

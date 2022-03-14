@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { DocumentDefinition, QueryOptions, FilterQuery } from "mongoose";
-import Card, { CardObject } from "../model/card.model";
+import { CardObject } from "../../frontend/src/core/interfaces/card.interface";
+import Card from "../model/card.model";
 import { OmitMongoAutoKeys } from "../utils/general.types";
 import log from "../utils/log";
 

@@ -1,8 +1,7 @@
-import _ from "lodash";
-import { DocumentDefinition, QueryOptions, FilterQuery } from "mongoose";
-import List, { ListObject } from "../model/list.model";
+import { DocumentDefinition, FilterQuery, QueryOptions } from "mongoose";
+import { ListObject } from "../../frontend/src/core/interfaces/list.interface";
+import List from "../model/list.model";
 import { OmitMongoAutoKeys } from "../utils/general.types";
-import log from "../utils/log";
 
 export async function createList(
   input: DocumentDefinition<OmitMongoAutoKeys<ListObject>>

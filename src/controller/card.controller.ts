@@ -1,6 +1,3 @@
-import { DocumentDefinition } from "mongoose";
-import Card, { CardObject } from "../model/card.model";
-import { OmitMongoAutoKeys } from "../utils/general.types";
 import { Request, Response } from "express";
 import {
   createCard,

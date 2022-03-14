@@ -1,6 +1,3 @@
-import { DocumentDefinition } from "mongoose";
-import List, { ListObject } from "../model/list.model";
-import { OmitMongoAutoKeys } from "../utils/general.types";
 import { Request, Response } from "express";
 import {
   createList,

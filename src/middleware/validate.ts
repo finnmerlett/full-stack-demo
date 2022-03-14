@@ -1,6 +1,7 @@
-import { NextFunction, Response, Request } from "express";
+import { NextFunction, Request, Response } from "express";
 import _ from "lodash";
 import { AnySchema, ValidationError } from "yup";
+import log from "../utils/log";
 
 /**
  * Validate requests against a schema. Curry with a schema to get a request
@@ -11,6 +12,7 @@ import { AnySchema, ValidationError } from "yup";
 export const validateReq =
   (schema: AnySchema) =>
   async (req: Request, res: Response, next: NextFunction) => {
+    log.info(req);
     try {
       await schema.validate({
         body: req.body,

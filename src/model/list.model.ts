@@ -1,12 +1,6 @@
 import mongoose from "mongoose";
 import { Schema, Types } from "mongoose";
-
-export interface ListObject {
-  _id: Types.ObjectId;
-  title: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { ListObject } from "../../frontend/src/core/interfaces/list.interface";
 
 const ListSchema = new Schema<ListObject>(
   {

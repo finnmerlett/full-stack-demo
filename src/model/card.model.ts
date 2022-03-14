@@ -1,14 +1,6 @@
-import mongoose from "mongoose";
-import { Schema, Types } from "mongoose";
-import List, { ListObject } from "./list.model";
-
-export interface CardObject {
-  _id: Types.ObjectId;
-  listId: ListObject["_id"];
-  title: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import mongoose, { Schema } from "mongoose";
+import { CardObject } from "../../frontend/src/core/interfaces/card.interface";
+import List from "./list.model";
 
 const CardSchema = new Schema<CardObject>(
   {
