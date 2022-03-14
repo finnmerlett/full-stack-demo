@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from "express";
 import _ from "lodash";
-import { AnyZodObject, ZodError } from "zod";
+import { AnySchema, ValidationError } from "yup";
 
 /**
  * Validate requests against a schema. Curry with a schema to get a request
@@ -8,17 +8,17 @@ import { AnyZodObject, ZodError } from "zod";
  * @param schema schema against which to validate the request
  * @returns the validation function (request handler)
  */
-export const validate =
-  (schema: AnyZodObject) =>
-  (req: Request, res: Response, next: NextFunction) => {
+export const validateReq =
+  (schema: AnySchema) =>
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
-      schema.parse({
+      await schema.validate({
         body: req.body,
         query: req.query,
         params: req.params,
       });
       next();
     } catch (err) {
-      res.status(400).send(_.get(err as ZodError, "errors"));
+      res.status(400).send(_.get(err as ValidationError, "errors"));
     }
   };

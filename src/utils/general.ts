@@ -18,9 +18,7 @@ type AfterProperties = { [x in keyof BeforeProperties]: string };
 /** Convert a mongoose object to the type expected as an api call return. This
  * means calling the `.toJSON()` method, and converting the `_id` and any
  * Date-type properties to strings. */
-export const asJsonReturnObject = <
-  T extends mongoose.Document & BeforeProperties
->(
+export const asJsonReturnObj = <T extends mongoose.Document & BeforeProperties>(
   object: T
 ): Merge<ToJson<T>, AfterProperties> => {
   const jsonObj = object.toJSON();

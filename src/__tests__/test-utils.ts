@@ -14,3 +14,11 @@ export function setupMongoMemoryTestService() {
     await mongoose.connection.close();
   });
 }
+
+/** The common fields found on any database object, when timestamps === true */
+export const commonFieldsAndTimestampsExpectation = {
+  __v: 0,
+  _id: expect.any(String),
+  createdAt: expect.any(String),
+  updatedAt: expect.any(String),
+};
