@@ -39,5 +39,5 @@ export async function deleteListHandler(req: Request, res: Response) {
   }
 
   await deleteList({ _id: listId });
-  return res.send(200);
+  return res.sendStatus(200);
 }
